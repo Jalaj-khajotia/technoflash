@@ -1,0 +1,96 @@
+<div class="row">
+    <div style="width:70%" class="col-md-9">
+        <!-- <a ui-sref="overview" class="pull-right btn btn-primary btn-outline btn-rounded">Back to Overview</a>
+     -->
+        <h3>JumpStart to Web Api development <small>in Node JS using Express framework</small></h3>
+        <span class="glyphicon glyphicon-dashboard bg-fade"></span>
+        <div class="jumbotron">
+            <div class="container">
+                <p>I would be giving some step by step tutorials on getting started with node. It is mostly used for creating rest based web apis but you also serve web pages or files. </p>
+                <p>
+                    We will be using windows 7 as base machine for delivering these tutorial but the same tutorial could easily be replicated on other OS.
+                </p>
+                <p>
+                    <ol>
+                        <li>Creating Rest Based Web Apis using Node JS</li>
+                        <ul>
+                            <li>Framework- Express JS</li>
+                        </ul>
+                        <li>Software needed</li>
+                        <ul>
+                            <li>Node JS - Platform</li>
+                            <li>Postman – used for creating http requests like GET, PUT, POST, DELETE</li>
+                        </ul>
+                    </ol>
+                </p>
+                <p>
+                    Install Node JS from official website according to your platform(win/ mac/ linux). We will be using postman as a client for sending http requests which is an extension for Chrome. You can also use SoapUI or apache-jmeter.
+                    <br/>
+                </p>
+                <p>
+                    <h2>1.  Initializing Node repo. </h2> Open command prompt (cmd.exe) or terminal or bash in your system. In window you can also open Node JS Command prompt. Go to directory where you want to create project( <pre class="prettyprint">
+                cd< path to directory > </pre>).
+                    <img src="images/1.png">
+                    <br/>
+                    <br/> Type npm init. (This command will initialize a node repository and will ask you certain parameter to fill in. You can leave parameter empty and can just press enter for skipping.) This will create a file package.json which actually contains all packages for you given project.
+                    <br/>
+                    <img src="images/2.png">
+                </p>
+                <p>
+                    <h2> 2. Creating server file </h2> Create server.js file in your current directory using file options.
+                </p>
+                <p>
+                    <h2>3. Installing Dependencies</h2>- In this we will install all applicable dependencies for our project. Here npm is node package manager which fetch packages via their online hub. Go to command line and install these packages.
+                    <pre class="prettyprint">npm install express</pre>
+                </p>
+                <p>
+                    <h2> 4. Start coding</h2> paste the following code snippet in server.js
+                    <pre class="prettyprint">
+                    var express = require('express');
+                    var app = express();
+                    var port = 3000;
+
+                    app.get('/', function(req, res){
+                        res.send('welcome to my api');
+                    });
+
+                    app.listen(port, function(){
+
+                    });
+                    console.log('my api is running on port:'+ port);
+                </pre>
+                    <br/> In above piece of code we have initialized express JS and created a simple address / for our api’s
+                </p>
+                <p>
+                    <h2> 5.  Running API’s </h2> Now it’s time to trigger our api so paste the following command in command line.
+                    <pre class="prettyprint">
+                     Node server.js 
+                </pre> You will get a message “my api is running on port:3000” which means you are ready with your basic api.
+                </p>
+                <p>
+                    <h2>6.  Testing api</h2> Open postman and write the url “localhost:3000/” and click on send.
+                    <br/>Yipee! You are done with your web api.
+                    <img src="images/3.png">
+                </p>
+            </div>
+        </div>
+    </div>
+    <div style="width:30%;" class="col-md-3 padding">
+        <div class="jumbotron">
+            <div class="container">
+                <p>
+                    <h3>Connect with MySql database<small> in Node JS using Express framework</small></h3>
+                    <a ui-sref="tut2" class="btn btn-primary btn-lg btn-outline btn-rounded">Learn more</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- technoflash1 -->
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-7031440325912521"
+     data-ad-slot="6646411092"></ins>
+<script type="text/javascript"> (adsbygoogle = window.adsbygoogle || []).push({});</script>
+
+<div class="spot-im-frame-inpage" data-post-id="004ddsfdsfs"></div>

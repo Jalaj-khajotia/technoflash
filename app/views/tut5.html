@@ -1,0 +1,75 @@
+<div style="width:70%">
+    <!-- <a ui-sref="overview" class="pull-right btn btn-primary btn-outline btn-rounded">Back to Overview</a>
+     -->
+    <h3>Load Testing your Web APIs<small> using apache j-Meter</small></h3>
+    <span class="glyphicon glyphicon-dashboard bg-fade"></span>
+    <div class="jumbotron">
+        <div class="container">
+            <p>
+                <h3>Introduction</h3>We have been using and writing web API’s in Node.js using express framework. Our web APIs could be used by various web or mobile clients like android app or iOS app or a web application. That’s why web APIs are becoming key component for our applications and for that web APIs should perform flawlessly. APIs are helping us to connect millions of clients with the growing business requirements.
+            </p>
+            <p>Performance matters a great deal, and more so in a world of micro services, which means the source of what a client application shows is probably being aggregated from multiple APIs behind the scenes. Generally, our web APIs have several end points but in production may or may not all endpoint work under same load. For Web APIs, the way to check performance is load/ stress testing.
+            </p>
+            <p>In this article we will be focusing on some tools which can help us to perform load testing on our application. We will also be looking over some bench marks which will help us in evaluating our endpoints. </p>
+            <p>
+                <h3>Load Testing Intro</h3>Load testing is also important component when we are writing web APIs for organizations. It essentially means testing our APIs against several simultaneous requests and their responses. Sometimes we do have requirement to carry out transaction type of queries while writing web APIs. So it is essential that we carry out load testing on application before making it to production.</p>
+            <p>Today we will be using apache j-meter for Load testing our Node.js application. J-meter is java based testing software which provide good UI which is very easy to work with.</p>
+        </div>
+    </div>
+    <div class="jumbotron">
+        <div class="container">
+            <p>
+                <h3>Project setup</h3>
+                <ul>
+                    <li>Node.js application for testing </li>
+                    <li>Apache j-meter – should be downloaded </li>
+                </ul>
+            </p>
+            <p>
+                <h3>Cloning sample Web API Repository</h3> Clone this sample Node.js application which has built in basic operation. Given application is using MySql, Express.js, Sequlize as ORM. Once you have cloned your node application, you need to install all dependencies needed for the application. We have api description
+            </p>
+            <p>Get /api/books
+                <br/> fetches all books
+            </p>
+            <p>
+                Get /api/book/id <br/> fetch one book with given id
+            </p>
+            <p>POST /api/book
+                <br/> Adds the book details. Book details should be sent by HTTP Body in JSON format
+            </p>
+            <p>PUT /api/book/id
+                <br/> Modify book details with given id. Book details should be sent by HTTP Body in JSON format.
+            </p>
+            <p>DELETE /api/book/id
+                <br/> Deletes the book with mentioned id.
+            </p>
+            <p>
+                <h3>JMeter configuration</h3>You should have downloaded j-meter on your local machine and as this is a java application, you should have java installed. <a href="http://jmeter.apache.org/usermanual/get-started.html#requirements"> JMeter requires a fully compliant JVM 6 or higher. </a> You need to unzip the downloaded content and run jmeter.bat which will start your j-meter software</p>
+        </div>
+    </div>
+    <div class="jumbotron">
+        <div class="container">
+            <p>
+                <h3>Getting started with Load testing</h3>Once you have your APIs ready we can get started with load testing on APIs. You need to start your API server and if you don’t have APIs ready then use our sample APIs in Node.js. If you are using our sample API Node.js Application, then start the server by
+                <pre class="prettyprint">Node server.js</pre></p>
+            <p>1. Creating a sample request in J-meter
+                <br/>Start you j-meter application by running “jmeter.bat”. You will see this screen if you j-meter is successfully started.</p>
+            <img src="images/load/jmeter.PNG" style="width:600px; margin:10px 0;">
+            <p>2. Create a thread group under TEST PLAN which is under Threads.
+                <img src="images/load/thread.PNG" style="width:600px; margin:10px 0;">
+                <br/>We have created acc thread group where we can write no. of threads (users) and ramp up periods. You can understand thread group as number of requests which will be sent simultaneously and Ramp Up period as the amount of time taken to start the number of threads for particular request.</p>
+            <p>3. Add a HTTP Header Manager under thread group and add header as shown.</p>
+            <img src="images/load/header.PNG" style="width:600px; margin:10px 0;">
+            <p>4. Add HTTP Request under thread group and could be found under Sampler. you can add your request details. We will add GET request for our sample APIs.</p>
+            <img src="images/load/http-req1.PNG" style="width:600px; margin:10px 0;">
+            <p>5. Add a Listener of type VIEW RESULTS TREE for you requests. We will be seeing all our response here.</p>
+            <img src="images/load/response-Get.PNG" style="width:600px; margin:10px 0;">
+            <p>6. Test your application for 1 request by clicking on play icon. You can see your output in VIEW RESULTS TREE. Once you have made 1 successful request, you are all set for load testing on your API for your application.</p>
+        </div>
+    </div>
+</div>
+<ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-7031440325912521" data-ad-slot="6646411092"></ins>
+<script type="text/javascript">
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<div class="spot-im-frame-inpage" data-post-id="004dqdwj"></div>

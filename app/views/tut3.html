@@ -1,0 +1,250 @@
+<div style="width:70%">
+    <!-- <a ui-sref="overview" class="pull-right btn btn-primary btn-outline btn-rounded">Back to Overview</a>
+     -->
+    <h3>Connect with Mongo database using mongoose<small> in Node JS using Express framework</small></h3>
+    <span class="glyphicon glyphicon-dashboard bg-fade"></span>
+    <div class="jumbotron">
+        <div class="container">
+            <p>We are going to make web api’s using Express.js and will connect to mongo database. As you are aware mongo is a no-sql type database and now a days used for there are a lot of companies building services on top of it. </p>
+            <p>We will be creating a simple to-do’s web api in express.js so will be supporting basic adding, retrieving, updating and deleting to-dos. We will be testing our web apis using Postman. </p>
+        </div>
+    </div>
+    <div class="jumbotron">
+        <div class="container">
+            <p>
+                Software needed
+                <ul>
+                    <li>Node JS - Platform</li>
+                    <li>Mongo db- database provider</li>
+                    <li>Postman – used for creating http requests like GET, PUT, POST, DELETE</li>
+                    <li>Sublime/Notepad++ - IDE for writing code.</li>
+                </ul>
+            </p>
+            <p>Before getting started you have to install softwares mentioned above according to your platform( win/ mac/ linux). </p>
+        </div>
+    </div>
+    <div class="jumbotron">
+        <div class="container">
+            <p>
+                <h2>1.	Installing dependencies</h2> You need to install the following packages in your node js project. Mongoogse will help in connecting and executing queries on mongo db. Morgan will help you log every event to console so that we can check for the error.
+            </p>
+            <pre class="prettyprint">
+npm install body-parser
+npm install express
+npm install mongoose 
+npm install morgan</pre>
+        </div>
+    </div>
+    <div class="jumbotron">
+        <div class="container">
+            <p>After you have finished mongo installation then you can start mongo db to listen to your node application.
+                <br/> Go to command prompt and then change the current directory to MongoDB\Server\3.2\bin where you will find mongod.exe. for windows it will be inside “program files”
+            </p><pre class="prettyprint">C:\Program Files\MongoDB\Server\3.2\bin
+mongod --dbpath=c:\mongo 
+</pre>
+            <p>
+                You need to mention file path after dbpath where you want to mongo to store db files. As soon as you run last query, your server will start listening to external ports.
+            </p>
+        </div>
+    </div>
+
+    <div class="jumbotron">
+    	<div class="container">
+    		<h3>3.	Coding up </h3>
+    		<p>First we will set up express, morgan, body-parser and we will be using them later on. 
+<pre class="prettyprint">var express = require('express');
+var logger = require('morgan');
+var bodyParser = require('body-parser');
+var app = express();
+app.use(logger('dev'));
+app.use(bodyParser.json());</pre>
+</p>
+<p>
+	We need to connect to mongo db and below statement will connect your application to mongo db where mongotest is the database name. Do not worry if the mentioned database does not exist it will automatically create for you.
+	<pre class="prettyprint">var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:27017/mongotest');</pre>
+Now we will create a simple Todo schema with fields Name and Content.
+<pre class="prettyprint">var Schema = mongoose.Schema;
+
+// todos
+var todosShema = new Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    content: {
+        type: String
+    }
+});
+
+var Todos = mongoose.model('todos', todosShema);</pre>
+</p>
+<p>
+	We will add routes for fetching all todos.
+	<pre class="prettyprint">app.get('/todos', function(req, res) {
+    Todos.find({}, function(err, todos) {
+
+        if (!todos) {
+            res.statusCode = 404;
+
+            return res.json({
+                error: 'Not found'
+            });
+        };
+
+        if (!err) {
+            return res.json({
+                status: 'OK',
+                todos: todos
+            });
+        } else {
+            res.statusCode = 500;
+            //  log.error('Internal error(%d): %s',res.statusCode,err.message);
+
+            return res.json({
+                error: 'Server error'
+            });
+        };
+    });
+});
+</pre>
+Lets add route for fetching one todo by id.
+<pre class="prettyprint">app.get('/todo/:id', function(req, res) {
+    Todos.findOne({
+        "id": req.param.id
+    }, function(err, todos) {
+
+        if (!todos) {
+            res.statusCode = 404;
+            return res.json({
+                error: 'Not found'
+            });
+        };
+
+        if (!err) {
+            return res.json({
+                status: 'OK',
+                todos: todos
+            });
+        } else {
+            res.statusCode = 500;
+            //  log.error('Internal error(%d): %s',res.statusCode,err.message);
+
+            return res.json({
+                error: 'Server error'
+            });
+        };
+    });
+});
+</pre>
+<pre class="prettyprint">app.post('/todo', function(req, res) {
+
+    var tdos = new Todos({
+        name: req.body.name,
+        content: req.body.content
+    });
+
+    tdos.save(function(err, todos) {
+        console.log(err);
+        if (!err) {
+            return res.json({
+                status: 'OK',
+                todos: todos
+            });
+        } else {
+            res.statusCode = 500;
+            res.json({
+                error: 'Server error'
+            });
+        }
+    });
+});</pre>
+
+<pre class="prettyprint">app.put('/todo/:id', function(req, res) {
+
+    var tdos = {
+        name: req.body.name,
+        content: req.body.content
+    };
+
+    Todos.findOneAndUpdate({
+        "id": req.param.id
+    },tdos,function(err, todos) {
+        console.log(err);
+        if (!err) {
+            return res.json({
+                status: 'OK',
+                todos: todos
+            });
+        } else {
+            res.statusCode = 500;
+            res.json({
+                error: 'Server error'
+            });
+        }
+    });
+});</pre>
+
+<pre class="prettyprint">app.delete('/todo/:id', function(req, res) {
+
+    Todos.findOneAndRemove({
+        id: req.param.id
+    },function(err, todos) {
+        console.log(err);
+        if (!err) {
+            return res.json({
+                status: 'OK',
+                todos: todos
+            });
+        } else {
+            res.statusCode = 500;
+            res.json({
+                error: 'Server error'
+            });
+        }
+    });
+});</pre>
+
+Finishing up.
+
+<pre class="prettyprint">// If no route is matched by now, it must be a 404
+app.use(function(req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+});
+
+// Start the server
+app.set('port', 3000);
+
+var server = app.listen(app.get('port'), function() {
+    console.log('Express server listening on port ' + server.address().port);
+});
+</pre>
+</p>
+<p> <h3>4. Testing your apis</h3>
+    We will be testing our apis using postman with some sample data. You need to make sure your mongo db is listening to your requests. We will be testing for getting, storing, updating and deleting todos. <br/>
+    Start you node server from command prompt using this command.
+    <pre class="prettyprint">node server.js</pre>  
+    Geting all todos.
+    <div class="container">
+    <img src="images/tut3/get all.PNG" style="width:600px; margin:10px 0;">
+    </div>
+     Getting one todo.
+    <img src="images/tut3/get.PNG" style="width:600px; margin:10px 0;">
+    Saving/ storing todo
+     <img src="images/tut3/post.PNG" style="width:600px; margin:10px 0;">
+    Updating/ changing todo
+     <img src="images/tut3/get.PNG" style="width:600px; margin:10px 0;">
+    Deleting/ removing todo
+     <img src="images/tut3/delete.PNG" style="width:600px; margin:10px 0;">
+</p>
+    	</div>
+    </div>
+     Entire tutorial is available on <a href="https://github.com/Jalaj-khajotia/nodejsMongo">  github on this link</a>
+</div>
+<ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-7031440325912521" data-ad-slot="6646411092"></ins>
+<script type="text/javascript">
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<div class="spot-im-frame-inpage" data-post-id="004ddsfsad"></div>

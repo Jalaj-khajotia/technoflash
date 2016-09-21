@@ -1,0 +1,202 @@
+<div style="width:70%">
+    <!-- <a ui-sref="overview" class="pull-right btn btn-primary btn-outline btn-rounded">Back to Overview</a>
+     -->
+    <h3>Connect to MySql database using Sequlize<small> in Node JS using Express framework</small></h3>
+    <span class="glyphicon glyphicon-dashboard bg-fade"></span>
+    <div class="jumbotron">
+        <div class="container">
+            <p>
+                In the previous Tutorial we already saw how to get started with node Js. We also created basic web apis in Node Js using express framework.
+            </p>
+            <p>Here we are going to see how to connect to MySql database using Sequlize. We will create a web api for a book library. So a user will be able to fetch, add, update and delete books. Again we will be using postman for testing our apis. </p>
+        </div>
+    </div>
+    <div class="jumbotron">
+        <div class="container">
+            <p>
+                Software needed
+                <ul>
+                    <li>Node JS - Platform</li>
+                    <li>MySQL – your database provider</li>
+                    <li>Postman – used for creating http requests like GET, PUT, POST, DELETE</li>
+                    <li>Sublime/Notepad++ - IDE for writing code.</li>
+                </ul>
+            </p>
+            <p>Install MySQL from official website according to your platform(win/mac/linux). It is recommended that you use some Integrated Development Environment so that it easy to read and interpret code. Throughout these courses we will be using sublime which is a cool IDE. </p>
+            <p>Before starting tutorial I would like you to create a user and a database in your MySql. We will be continuing with the previous tutorial example. It is strongly encouraged that you watch previous tutorial before continuing.
+            </p>
+        </div>
+    </div>
+    <div class="jumbotron">
+        <div class="container">
+            <p>
+                <h3>1) MySql Configuration</h3> Create a config.json file your project directory and paste the following snippet. You need to add the database name, user and password so that express can talk to your database.
+                <div style="padding:10px 0 0 50px;">
+                    <code class="prettyprint">
+                     "dev": { </br>
+                        "driver": "mysql",</br>
+                        "user": "user of database",</br>
+                        "database": "your database name",</br>
+                        "password": "your database password"
+                      }
+</code></div>
+            </p>
+            <p>
+                <h3>2)  Installing dependencies</h3> You need to install the following packages in your node js project.
+                <br/> Sequelize is ORM through which you can connect and run sql queries on your MySql Database. It is actually a wrapper on mysql package. It is very easy to learn and has got excellent documentation on their website.
+                <br/>Body-parser will help you to read body content of http requests.
+                <pre class="prettyprint">npm install sequelize
+npm install body-parser
+npm install mysql
+</pre>
+            </p>
+            <p>
+                <h3>3)  Setting up- Paste the following code snippet </h3> You need to create a table in MySql in the database you added in config.json. Name the table books and add 3 rows - id (datatype int), bookName (datatype varchar(25) and bookPrice (datatype int).
+                <img src="images/sql.png">
+                <br/>
+                <pre class="prettyprint">
+var express = require('express');
+var Sequelize = require('sequelize');
+var config = require('./config.json');
+var bodyParser = require('body-parser');
+
+var password = config.password ? config.password : null;
+
+var sequelize = new Sequelize(
+    config.database,
+    config.user,
+    config.password, {
+        logging: console.log,
+        define: {
+            timestamps: false
+        }
+    }
+);</pre>
+                <pre class="prettyprint">
+var app = express();
+var port = 3000;
+var router = express.Router(); // will help in adding routes
+app.use(bodyParser.urlencoded());
+app.use(bodyParser.json());
+</pre> Now we will define a model for our book library. We will keep only 2 fields for books i.e. bookName and bookPrice.
+                <pre>var bookModel = sequelize.define('books', {   //define your model
+    "bookName": Sequelize.INTEGER,
+    "bookPrice": Sequelize.INTEGER
+});
+</pre>
+            </p>
+            <p>
+                <h3>4) Add GET Request- </h3>
+                <pre class="prettyprint">
+app.use('/api', router); //this will add routing to your api.
+//your api endpoint  localhost:3000/api/books
+
+router.get('/books', function(req, res) {
+    bookModel.findAll().
+    then(function(books) {
+        res.status(200).json(books);
+    }, function(error) {
+       res.status(500).send(error);
+    });
+});
+
+app.listen(port, function() {
+
+});
+console.log('my api is running on port:' + port);
+
+                </pre>
+            </p>
+            <p>
+                <h3>5) Start up</h3> Start you application through command line.
+                <pre class="prettyprint">Node server.js </pre>
+            </p>
+            <p>
+                <h3>6)  Testing up </h3> Go to postman and enter url mentioned below <pre>http://localhost:3000/api/books </pre> Select GET request and click SEND.
+                <img src="images/get.png"> In response if you see status 200 then it show everything is working properly. You will not see any data because we don’t have any data stored in our table.
+            </p>
+            <p>
+                <h3>7)  Adding other Requests: PUT, POST, DELETE</h3>
+                <pre class="prettyprint">router.get('/book/:id', function(req, res) {
+    bookModel.findAll({
+        where: {
+            id: req.params.id
+        }
+    }).
+    then(function(books) {
+        res.status(200).json(books);
+    }, function(error) {
+        res.status(500).send(error);
+    });
+});
+</pre>
+                <pre class="prettyprint">router.post('/book', function(req, res) {
+    console.log(req.body);
+    var data = {
+        "bookName": req.body.bookName,
+        "bookPrice": req.body.bookPrice
+    };
+
+    bookModel.create(data).
+    then(function(books) {
+        res.status(200).json(books);
+    }, function(error) {
+        res.status(500).send(error);
+    });
+});
+</pre>
+                <pre class="prettyprint">router.put('/book/:id', function(req, res) {
+    var data = {
+        id: req.params.id,
+        bookName: req.body.bookName,
+        bookPrice: req.body.bookPrice
+    };
+
+    bookModel.update(data, {
+        where: {
+            id: data.id
+        }
+    }).
+    then(function(book) {
+        res.status(200).json(book);
+    }, function(error) {
+        res.status(500).send(error);
+    });
+});
+</pre>
+                <pre class="prettyprint">router.delete('/book/:id', function(req, res) {
+    var data = {
+        id: req.params.id
+    };
+
+    bookModel.destroy({
+        where: {
+
+            id: data.id
+
+        }
+    }).
+    then(function(book) {
+        res.status(200).json(book);
+    }, function(error) {
+        res.status(500).send(error);
+    });
+});
+</pre>
+            </p>
+            <p>
+                <h3>7) Final Testing</h3> We are done with creating all operation in our web api. We will be testing our api by adding a book content.
+                <img src="images/post.png"> Here is a sample get request for fetching all books in our database.
+                <img src="images/gets.png"> Here is a sample put request for updating a particular book.
+                <img src="images/put.png"> Here is a sample Delete request for removing particular book.
+                <img src="images/del.png">
+            </p>
+        </div>
+    </div>
+    Entire tutorial is available on <a href="https://github.com/Jalaj-khajotia/NodeJsBookRepo">  github on this link</a>
+</div>
+<ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-7031440325912521" data-ad-slot="6646411092"></ins>
+<script type="text/javascript">
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+<div class="spot-im-frame-inpage" data-post-id="004ddsfdsfq"></div>

@@ -1,0 +1,43 @@
+<div class="dashboard-page">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-3 col-md-2 sidebar">
+
+       <div class="text-center">
+        <h2 class="brand">Techno Flash<small> Tutorials</small></h2>
+        <img src="images/flat-avatar.png" class="user-avatar" /><br />
+       <!--  <a ui-sref="login" class="btn btn-white btn-outline btn-rounded btn-sm">Logout</a> -->
+      </div>
+
+      <ul class="nav nav-sidebar">
+        <li ng-class="{active: $state.includes('overview')}"><a ui-sref="overview">Home <span class="sr-only">(current)</span></a></li>       
+        <!-- <li><a href="http://startreact.com/product/ani-theme/">Free React version</a></li>
+        <li><a href="http://www.strapui.com/ani-angularjs-theme">Angular Premium Edition</a></li> -->
+        <li ng-class="{hidedrop: collapseVar==1}">{{dropDown}}
+                <a href="" ng-click="check(1)"><i class="fa fa-wrench fa-fw"></i>Node.js Tutorials<span
+                        class="fa arrow"></span></a>
+                <ul class="nav nav-second-level" collapse="collapseVar!=1">
+                    <li ui-sref-active="active">
+                        <a ui-sref="reports">Start WebApi development in 5 mins</a>
+                    </li>
+                    <li ui-sref-active="active">
+                        <a ui-sref="loadtesting">Load Testing in Node.js</a>
+                    </li>
+                   <!--  <li ui-sref-active="active">
+                       <a ui-sref="dashboard.notifications">Using Mongo (no-sql db) with express</a>
+                   </li>
+                   <li ui-sref-active="active">
+                       <a ui-sref="dashboard.typography">Applying authentication to web apis</a>
+                   </li> -->
+                    
+                </ul>
+                <!-- /.nav-second-level -->
+            </li>
+      </ul>
+
+    </div>
+    <div class="col-sm-8 col-sm-offset-3 col-md-10 col-md-offset-2 main" ui-view>
+    </div>
+  </div>
+</div>
+</div>
